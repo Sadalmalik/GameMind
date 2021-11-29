@@ -23,15 +23,15 @@ namespace GOAP
 			return Mathf.Sqrt( magnitude );
 		}
 
-		public static float SliceDistance(MetaVector state, MetaVector substate)
+		public static float SliceDistance(MetaVector vector, MetaVector slice)
 		{
 			float distance = 0;
 
-			foreach (var pair in substate)
+			foreach (var pair in slice)
 			{
-				if (!state.ContainsKey(pair.Key))
+				if (!vector.ContainsKey(pair.Key))
 				{
-					var delta = pair.Value - state[pair.Key];
+					var delta = pair.Value - vector[pair.Key];
 					distance += delta * delta;
 				}
 			}
@@ -39,9 +39,9 @@ namespace GOAP
 			return Mathf.Sqrt(distance);
 		}
 		
-		public static float FullDistance(MetaVector state, MetaVector substate)
+		public static float FullDistance(MetaVector vector, MetaVector slice)
 		{
-			return Magnitude(state - substate);
+			return Magnitude(vector - slice);
 		}
 
 		public static MetaVector operator *(MetaVector state, float power)
@@ -54,11 +54,11 @@ namespace GOAP
 			return newVector;
 		}
 
-		public static MetaVector operator +(MetaVector state, MetaVector substate)
+		public static MetaVector operator +(MetaVector vector, MetaVector slice)
 		{
-			var result = new MetaVector(state);
+			var result = new MetaVector(vector);
 
-			foreach (var pair in substate)
+			foreach (var pair in slice)
 			{
 				if (!result.ContainsKey(pair.Key))
 					result[pair.Key] = pair.Value;
@@ -69,11 +69,11 @@ namespace GOAP
 			return result;
 		}
 
-		public static MetaVector operator -(MetaVector state, MetaVector substate)
+		public static MetaVector operator -(MetaVector vector, MetaVector slice)
 		{
-			var result = new MetaVector(state);
+			var result = new MetaVector(vector);
 
-			foreach (var pair in substate)
+			foreach (var pair in slice)
 			{
 				if (!result.ContainsKey(pair.Key))
 					result[pair.Key] = -pair.Value;
@@ -84,6 +84,15 @@ namespace GOAP
 			return result;
 		}
 
+		public static bool ContainsSlice(MetaVector vector, MetaVector slice)
+		{
+			foreach (var pair in slice)
+				if (!vector.ContainsKey(pair.Key) || vector[pair.Key] < pair.Value)
+					return false;
+			
+			return true;
+		}
+		
 		public override string ToString()
 		{
 			StringBuilder sb = new StringBuilder();
@@ -94,9 +103,8 @@ namespace GOAP
 				if (!first)
 					sb.Append(", ");
 				first = false;
-				sb.Append(pair.Key);
-				sb.Append(": ");
-				sb.Append(pair.Value);
+				
+				sb.Append($"'{pair.Key}': {pair.Value:0.00}");
 			}
 			sb.Append(" )");
 			return sb.ToString();

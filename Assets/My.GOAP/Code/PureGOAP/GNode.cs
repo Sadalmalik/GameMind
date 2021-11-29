@@ -8,6 +8,6 @@ namespace GOAP
 		public GAction action;
 		public float fitness;
 
-		public Dictionary<string, float> state = new Dictionary<string, float>();
+		public MetaVector state = new MetaVector();
 	}
 }

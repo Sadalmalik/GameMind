@@ -9,7 +9,7 @@ namespace GOAP
 		public string Name;
 		public float  cost;
 
-		public Dictionary<string, float> preConditions;
-		public Dictionary<string, float> postEffects;
+		public MetaVector preConditions;
+		public MetaVector postEffects;
 	}
 }

@@ -10,8 +10,8 @@ namespace GOAP
 		public bool findPlan;
 		public int searchLimnit=1000;
 		[Space]
-		public Dictionary<string, float> worldState;
-		public Dictionary<string, float> targetState;
+		public MetaVector worldState;
+		public MetaVector targetState;
 		[Space]
 		public GPlanner planner;
 		
@@ -47,9 +47,7 @@ namespace GOAP
 			sb.AppendLine("Found the plan:");
 			foreach (var node in path)
 			{
-				sb.AppendLine($"node: '{node.action?.Name}'/{node.action?.cost ?? 0}\nstate:");
-				GPlanner.DumpState(node.state, sb);
-				sb.AppendLine();
+				sb.AppendLine($"step: '{node.action?.Name}'/{node.action?.cost ?? 0} -> {node.state}");
 			}
 			
 			Debug.Log(sb.ToString());
